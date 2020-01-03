@@ -1,0 +1,57 @@
+---
+layout: post
+status: publish
+published: true
+title: Mengembalikan File yang Terhapus Permanen dengan Linux
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 559
+wordpress_url: http://adityaputra.com/?p=559
+date: '2016-01-21 13:19:06 +0800'
+date_gmt: '2016-01-21 06:19:06 +0800'
+categories:
+- Blog
+- Tutorial
+tags:
+- grep
+- recover
+- deleted files
+- dd
+comments:
+- id: 1093
+  author: hamsca
+  author_email: hamscaf15c@gmail.com
+  author_url: http://gravatar.com/hamsca
+  date: '2019-08-30 23:38:23 +0800'
+  date_gmt: '2019-08-30 16:38:23 +0800'
+  content: mohon bantuan gan, kalau yang di cari 1 folder, bagaimana ?
+---
+<p>Ada kalanya, kita secara tidak sengaja menghapus file tertentu. Menghapus ini bisa berarti melakukan operasi <em>deletion</em>, atau <em>overwrite </em>(menimpa), atau menghapus sebagian isi file secara sengaja maupun tidak disengaja.<!--more--> Nah, ternyata ada cara untuk melakukan <em>recovery </em>pada file-file tersebut.</p>
+<p>Ada sedikit <em>background story </em>dari tulisan ini. Kebetulan memang hari ini tadi, seorang rekan saya yang juga merupakan seorang <em>web developer</em> menyadari bahwa terdapat satu file teks penting yang tiba-tiba ukurannya menjadi 0 <em>byte</em>, alias menjadi sebuah <em>empty file</em>. Sedihnya lagi, file ini tidak masuk ke dalam <em>git repository</em>, sehingga tidak ada <em>backup </em>dari file tersebut. Sebenarnya kami pun berusaha ikhlas dan berencana untuk mengulang pekerjaan pada file tersebut dari awal. <em>Alhamdulillah</em>, setelah satu-dua kali <em>googling</em>, saya menemukan salah satu <em>thread </em>di <a href="http://unix.stackexchange.com/questions/149342/can-overwritten-files-be-recovered" target="_blank"><em>Stack Exchange</em></a> yang cukup membantu. Tutorial ini sudah saya coba dan bekerja dengan baik di Ubuntu Server dan Manjaro Linux, dan semestinya berjalan dengan baik di berbagai komputer UNIX lainnya.</p>
+<p>Pada dasarnya, ada dua perintah dasar linux yang digunakan, yaitu <code>grep</code> dan <code>dd</code>.</p>
+<p>Pertama, kita perlu melakukan pencarian dengan <em>search key </em>tertentu menggunakan perintah <code>grep</code>. Usahakan <em>search key </em>yang digunakan terdapat pada versi terakhir file tersebut sehingga Anda dapat menemukan file dengan revisi terbaru. Berikut contoh perintahnya:<br />
+<code>sudo grep -a -b "search-key-here" /dev/sda1</code></p>
+<p>Parameter <code>-a</code> berarti bahwa pencarian dilakukan dengan asumsi bahwa tipe file yang dicari adalah file teks. Parameter kedua <code>-b</code> digunakan untuk menampilkan <em>byte offset </em>yang akan digunakan dalam perintah selanjutnya. Parameter ketiga merupakan <em>search key </em>yang harus Anda sesuaikan dengan <em>key </em>pencarian yang Anda lakukan. Terakhir, <code>/dev/sda1</code> merupakan nama partisi <em>harddisk </em>tempat file tersebut berada. Sebagai catatan, untuk mengetahui daftar partisi harddisk, Anda dapat menggunakan perintah <code>fdisk -l</code>. Dalam tutorial ini, saya menggunakan partisi <em>harddisk</em> <code>/dev/sda1</code>, mohon sesuaikan dengan partisi Anda.</p>
+<p>Selanjutnya, apabila berhasil ditemukan, eksekusi perintah <code>grep</code> tersebut akan menghasilkan daftar <em>block </em>yang memiliki <em>search key </em>yang dicari, contoh <em>output</em>-nya adalah sebagai berikut:<br />
+<code>20199612669:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="search-key-here">
+20199633149:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="search-key-here">
+20199653629:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="search-key-here">
+20199682301:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="search-key-here"></code><br />
+<em>Block offset </em>yang ditampilkan dalam format <em>number </em>yang berada di sebelah kiri adalah yang akan kita gunakan pada tahap selanjutnya. Akan terdapat beberapa hasil pencarian yang ditampilkan. Bisa saja, terdapat dua (atau lebih) file berbeda pada hasil pencarian ini. Oleh karenanya, usahakan menggunakan <em>search key </em>yang spesifik dan hanya akan ditemukan pada file yang ingin di-<em>recover</em>.</p>
+<p>Setelah Anda mendapatkan <em>block </em>yang dicari, tahap selanjutnya adalah membuka <em>block-block </em>lainnya dengan <span style="text-decoration: underline;">menggunakan <em>block </em>yang terbaru</span>. <em>Block </em>terbaru yang saya maksud adalah <em>block </em>terakhir yang ditampilkan pada hasil pencarian. Dalam contoh di atas, <em>block </em>yang saya maksud adalah <code>20199682301</code>.</p>
+<p>Tahap selanjutnya ini agak <em>tricky</em>, karena Anda perlu melakukan pencarian sepanjang <em>block</em> dari file tersebut. Pertama, jalankan perintah berikut:<br />
+<code>dd if=/dev/sda1 count=1 skip=$(expr&nbsp;20199682301 / 512) > file.txt</code><br />
+Perintah tersebut akan meng-<em>copy </em>isi <em>block </em><code>20199682301</code> sepanjang satu <em>block </em>dan memasukkannya ke <code>file.txt</code>. Nah, kalau kita perhatikan hasil <code>file.txt</code>, maka kita hanya mendapatkan satu potong file tersebut. Oleh karenanya, Anda perlu merubah parameter <code>count</code> dan <code>skip</code>. Parameter <code>count</code> akan menentukan berapa banyak <em>block </em>yang akan di-<em>copy</em>. Coba Anda rubah menjadi 2, 3 dan seterusnya dan coba lihat hasilnya pada <code>file.txt</code>. Sedangkan, parameter <code>skip</code> akan melewati <em>n </em>blok tertentu sesuai masukan Anda. Ada cara simpel untuk 'mengakali' parameter ini yaitu dengan menambahkan <code> + <strong>x</strong></code> ataupun <code> - <strong>x</strong></code> untuk men-<em>skip </em>x blok setelahnya maupun x blok sebelumnya. Sehingga, perintah tadi dapat Anda rubah menjadi<br />
+<code>dd if=/dev/sda1 count=1 skip=$(expr&nbsp;20199682301 / 512 + 1) > file.txt</code>, atau<br />
+<code>dd if=/dev/sda1 count=1 skip=$(expr&nbsp;20199682301 / - 1) > file.txt</code>,<br />
+atau angka berapapun sesuai kebutuhan Anda. Tujuannya, Anda dapat mendapatkan kembali file tersebut secara utuh. Intinya, 'mainkan' parameter count dan skip. Oya, jangan melewatkan satu spasi sekalipun dari perintah di atas. ;-)</p>
+<p>Selamat mencoba, let me know if you'd like to ask anything!</p>

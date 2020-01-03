@@ -1,0 +1,66 @@
+---
+layout: post
+status: publish
+published: true
+title: Membuat VPN Server Sendiri dengan OpenVPN Access Server
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 385
+wordpress_url: http://adityaputra.com/?p=385
+date: '2015-08-04 08:04:15 +0800'
+date_gmt: '2015-08-04 01:04:15 +0800'
+categories:
+- Tutorial
+tags:
+- openvpn
+- vpn
+- tunneling
+comments:
+- id: 980
+  author: sali
+  author_email: ms_iah@yahoo.com
+  author_url: ''
+  date: '2016-04-06 11:19:11 +0800'
+  date_gmt: '2016-04-06 04:19:11 +0800'
+  content: Hi, apakah membuka jasa freelance untuk setting VPN di kantor? kami sedang
+    cari yg bisa setting VPN di kantor kami untuk bisa connect ke kantor pusat di
+    luar. Thanks
+- id: 982
+  author: aditya
+  author_email: adityaf.putra@gmail.com
+  author_url: ''
+  date: '2016-04-06 12:47:59 +0800'
+  date_gmt: '2016-04-06 05:47:59 +0800'
+  content: |-
+    Halo,
+    VPN untuk berapa kantor, Mbak? Insyaallah saya bisa bantu. Untuk lebih jelasnya, bisa langsung kontak saya aja via email di me[at]adityaputra.com / adityaf.putra[at]gmail[dot]com, atau kontak langsung ke nomor +6282.143.585311. Kontak yang lainnya juga saya cantumkan di halaman <a href="http://adityaputra.com/about/" title="About Me" target="_blank" rel="nofollow">About Me</a>. Terima kasih!
+---
+<p style="text-align: justify;">VPN, Virtual Private Network kurang lebih dapat dipahami sebagai jaringan privat yang diimplementasikan melalui jaringan publik. Dengan VPN, kita dapat terhubung dengan jaringan komputer privat (semacam LAN) melalui jaringan publik di manapun. <!--more-->Contoh penggunaannya, kita jadi tidak perlu repot-repot harus berada di kantor untuk sekedar terhubung pada jaringan lokal kantor karena kita dapat menggunakan jaringan internet manapun dari manapun dan menggunakan VPN yang menghubungkan ke jaringan kantor. (semoga cukup jelas :D)<!--more--></p>
+<p style="text-align: justify;">Nah, penggunaan VPN tidak hanya terbatas pada korporasi, melainkan banyak juga digunakan oleh individu. Misalkan, saya-yang bukan pekerja kantoran- menggunakan VPN untuk mengakses komputer di rumah, dari manapun saya berada, sehingga saya dapat sewaktu-waktu me-remote dengan SSH, dan men-download file yang saya butuhkan dari komputer rumah. Kalau Anda punya 'smart home system', anda juga bisa mengontrol rumah Anda dari jauh dengan terhubung melalui VPN. Selain itu, VPN juga saya gunakan untuk 'menjaga privasi' ketika menggunakan jaringan internet publik: wifi, mobile provider, dsb.</p>
+<p style="text-align: justify;">Bagaimana VPN dapat menjaga privasi kita? Sebagai contoh, kalau kita menggunakan wifi di tempat umum, semua orang yang memiliki akses ke jaringan wifi tersebut sebenarnya dapat melakukan 'sniffing' atau memata-matai semua paket data yang berlalu-lintas di jaringan tersebut. Bayangkan kalau email, obrolan, bahkan data transaksi perbankan Anda dicuri oleh orang lain, repot kan? VPN bisa menjadi solusi karena VPN membuat jaringan privat yang mengamankan paket data yang anda 'transceive' melalui jaringan publik. Ada tulisan bagus mengenai pentingnya VPN di <a href="http://lifehacker.com/5940565/why-you-should-start-using-a-vpn-and-how-to-choose-the-best-one-for-your-needs" target="_blank">Lifehacker</a> dan <a href="http://gizmodo.com/5990192/vpns-what-they-do-how-they-work-and-why-youre-dumb-for-not-using-one" target="_blank">Gizmodo</a>.</p>
+<p style="text-align: justify;">Selanjutnya ada solusi VPN yang gratis yang dapat Anda install sendiri, yaitu dengan <a href="http://openvpn.org/" target="_blank">OpenVPN</a>. OpenVPN ini adalah aplikasi open source dan gratis, hanya saja perlu sedikit perjuangan panjang untuk melakukan instalasi dan setup sampai dapat digunakan. Ada solusi yang lebih mudah dengan <a href="https://openvpn.net/index.php/access-server/overview.html" target="_blank">OpenVPN Access Server</a>. Aplikasi ini dapat di-install dan setup dalam waktu kurang dari lima menit. Oya, sebenarnya aplikasi ini adalah aplikasi berbayar, hanya saja dapat digunakan secara <span style="text-decoration: underline;">gratis dengan batasan 'two concurrent connections'</span>. Lumayan, kan?</p>
+<p style="text-align: justify;">Sebelum melakukan instalasi, bahan-bahan yang dibutuhkan adalah sebagai berikut:</p>
+<ul style="text-align: justify;">
+<li>Komputer sebagai VPN server. Dalam hal ini saya menggunakan droplet Ubuntu 14.04 64 bit dari <a href="https://www.digitalocean.com/?refcode=ab792337070f" target="_blank">DigitalOcean</a> (referral, dengan tambahan credit gratis 10USD, 5USD/bulan. Jika Anda membutuhkan balance Paypal, silakan <a title="About Me" href="http://adityaputra.com/about/" target="_blank">hubungi saya</a>). Anda juga bisa menggunakan komputer manapun dengan ip publik.</li>
+</ul>
+<p style="text-align: justify;">Nah, setelah server siap, tahap instalasi dan konfigurasinya adalah sebagai berikut:</p>
+<ol style="text-align: justify;">
+<li>Lakukan koneksi SSH ke server Anda</li>
+<li>Update repositori dengan perintah <code>sudo apt-get update</code></li>
+<li>Download OpenVPN AS dengan perintah <code>wget http://swupdate.openvpn.org/as/openvpn-as-2.0.19-Ubuntu14.amd_64.deb</code></li>
+<li>Install package OpenVPN AS: <code>sudo dpkg -i openvpn-as-2.0.19-Ubuntu14.amd_64.deb</code></li>
+<li>Buat password untuk user openvpn: <code>sudo passwd openvpn</code></li>
+<li>Cek status openvpn pada <code>https://ip-address-server:943/admin/</code>. Kalau statusnya adalah 'ON', maka VPN Anda siap digunakan</li>
+</ol>
+<p style="text-align: justify;">Selanjutnya untuk konfigurasi komputer klien dan menghubungkan ke VPN Anda, Anda perlu men-download file <code>client.ovpn</code> dari dengan tahapan sebagai berikut:</p>
+<ol style="text-align: justify;">
+<li>Login melalui browser <code>ke: https://ip-address-server:943/</code> dengan username <code>openvpn</code> dan password yang anda masukkan pada langkah ke 5</li>
+<li>Setelah login, download konfigurasi OpenVPN dengan memilih "Yourself (user-locked profile)". File konfigurasi ini yang akan digunakan untuk otentikasi komputer, HP, dan berbagai perangkat Anda ke VPN</li>
+</ol>
+<p style="text-align: justify;">Setelah men-download file <code>client.ovpn</code>, gadget Anda dapat melakukan koneksi ke VPN. Untuk komputer klien dengan sistem operasi linux, pastikan telah meng-install openvpn dengan <code>sudo apt-get install openvpn</code>, kemudian lakukan koneksi dengan <code>sudo openvpn --config client.ovpn</code>. Untuk Android, download <a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn" target="_blank">OpenVPN Connect</a> kemudian pilih menu <code>import -> import profile from SD card -> pilih file client.ovpn -> Connect</code>. Untuk terhubung dari komputer Windows, saya belum pernah mencobanya, tapi sepertinya ada banyak tutorial untuk terhubung ke VPN melalui Windows.</p>
+<p style="text-align: justify;">Semoga bermanfaat. ;)</p>

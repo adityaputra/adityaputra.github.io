@@ -1,0 +1,39 @@
+---
+layout: post
+status: publish
+published: true
+title: 'Senjata Rahasia: Perintah ''grep'''
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 479
+wordpress_url: http://adityaputra.com/?p=479
+date: '2015-12-04 21:19:16 +0800'
+date_gmt: '2015-12-04 14:19:16 +0800'
+categories:
+- Tutorial
+tags:
+- linux
+- grep
+- command line
+- unix
+comments: []
+---
+<p>Kali ini saya ingin berbagi tentang <em>productivity tool </em>yang biasa saya gunakan untuk melakukan <em>debugging</em>, <em>maintenance</em>, ataupun <em>development </em>dengan memanfaatkan perintah <em>grep</em>. Tips ini berguna terutama pada <em>development environment</em> yang mana saya belum terbiasa dengannya, misalnya ketika saya harus bekerja dengan <em>framework</em> baru, atau bahasa pemrograman baru, sedangkan saya membutuhkan penyelesaian yang cepat. Tips ini juga dapat dimanfaatkan untuk mencari <em>snippet </em>kecil dalam <em>source code </em>sehingga Anda akan lebih mudah untuk menemukan dan mengeditnya.<!--more--></p>
+<p>Perintah <em>grep </em>pada dasarnya digunakan untuk mencari suatu string yang terdapat di suatu <em>stream</em>, <em>file</em> ataupun direktori. Perintahnya pun sederhana dan bekerja dengan cepat. Ibaratnya, perintah <em>grep </em>ini dapat dimanfaatkan untuk mencari jarum dalam tumpukan jerami dengan mudah.</p>
+<p>Contoh pertama yang paling sederhana, Anda dapat menggunakan perintah <em>grep </em>untuk mencari suatu string dari suatu file dengan perintah sebagai berikut:<br />
+<code>grep "string_yang_dicari" namafile.ext<br />
+<a href="http://adityaputra.com/wp-content/uploads/2015/12/Screenshot_2015-12-04_20-52-54-e1449238416467.png"><img class="aligncenter size-full wp-image-483" src="http://adityaputra.com/wp-content/uploads/2015/12/Screenshot_2015-12-04_20-52-54-e1449238416467.png" alt="Screenshot_2015-12-04_20-52-54" width="659" height="144" /></a></code></p>
+<p>Kemudian, untuk meningkatkan visibilitas dari string yang dicari, Anda dapat memanfaatkan parameter --color untuk memberikan warna pada hasil perintah <em>grep</em>. Contohnya:<br />
+<code>grep "string_yang_dicari" namafile.ext --color<br />
+<a href="http://adityaputra.com/wp-content/uploads/2015/12/Screenshot_2015-12-04_21-07-50-e1449238482197.png"><img class="aligncenter size-full wp-image-482" src="http://adityaputra.com/wp-content/uploads/2015/12/Screenshot_2015-12-04_21-07-50-e1449238482197.png" alt="Screenshot_2015-12-04_21-07-50" width="659" height="90" /></a></code></p>
+<p><em>grep </em>juga dapat Anda gunakan untuk mencari string tanpa memperhatikan <em>case</em>. Artinya, string "echo" dan "EcHo" akan dianggap sama dalam proses pencarian. Anda cukup menambahkan parameter "-i" pada perintah <em>grep</em>:<br />
+<code>grep "string_yang_dicari" namafile.ext --color -i</code><br />
+<a href="http://adityaputra.com/wp-content/uploads/2015/12/Screenshot_2015-12-04_21-08-33.png"><img class="aligncenter wp-image-481 size-full" src="http://adityaputra.com/wp-content/uploads/2015/12/Screenshot_2015-12-04_21-08-33-e1449238555862.png" alt="Screenshot_2015-12-04_21-08-33" width="659" height="92" /></a></p>
+<p>Satu lagi, <em>grep</em> juga dapat digunakan untuk mencari string dari sekumpulan file yang terdapat pada suatu direktori secara rekursif. Untuk melakukannya, Anda hanya perlu menambahkan parameter "-r" tanpa memberikan parameter file tujuan:<br />
+<code>grep "string_yang_dicari" --color -i -r</code></p>
+<p>Terakhir, <em>grep </em>juga dapat digunakan untuk <em>pipelining </em>dari output suatu perintah. <em>grep </em>juga dapat digunakan dengan berbagai parameter lainnya, termasuk juga menggunakan <em>regular expression</em>. Untuk lebih jelasnya, silakan mengacu pada manual dari perintah ini dengan mengeksekusi perintah <code>man grep</code>. Semoga membantu ;-)</p>

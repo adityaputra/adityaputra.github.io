@@ -1,0 +1,78 @@
+---
+layout: post
+status: publish
+published: true
+title: 'Magento 1.9.2: 5-cents Price Rounding'
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 642
+wordpress_url: http://adityaputra.com/?p=642
+date: '2016-08-25 21:08:35 +0800'
+date_gmt: '2016-08-25 14:08:35 +0800'
+categories:
+- Tutorial
+tags:
+- magento
+- rappen rounding
+- 5-cents rounding
+comments:
+- id: 1035
+  author: HappyDev
+  author_email: saskia.bader@pixeltex.com
+  author_url: ''
+  date: '2017-02-13 23:40:08 +0800'
+  date_gmt: '2017-02-13 16:40:08 +0800'
+  content: Thank you! This was exactly what I had to do for a Swiss online shop that
+    I'm developing for in my job. The client will be happy that you saved me so much
+    time - because he pays per hour. You saved me so many headaches because I'm not
+    yet a Magento expert.
+- id: 1036
+  author: aditya
+  author_email: adityaf.putra@gmail.com
+  author_url: ''
+  date: '2017-02-14 07:40:36 +0800'
+  date_gmt: '2017-02-14 00:40:36 +0800'
+  content: Glad it helped you. Thanks for leaving your comment!
+- id: 1042
+  author: Raffaele Capasso
+  author_email: raffaele.capasso@plumastudio.com
+  author_url: ''
+  date: '2017-11-20 17:18:28 +0800'
+  date_gmt: '2017-11-20 10:18:28 +0800'
+  content: "Hi! Thanks for your article. \r\nIt don't works on configurable product.
+    How can I fix it?\r\n\r\nHave a nice day!"
+- id: 1043
+  author: aditya
+  author_email: adityaf.putra@gmail.com
+  author_url: ''
+  date: '2017-11-22 11:22:56 +0800'
+  date_gmt: '2017-11-22 04:22:56 +0800'
+  content: |-
+    Hi, thanks for coming in!
+
+    In my case, it was working well both for simple and configurable products. Do you have the product URL?
+---
+<p>Today I am working on a Magento site for a Switzerland client which&nbsp;requires the implementation of Rappen Rounding, a 5-cents rounding for&nbsp;the total price for every transaction.</p>
+<p>I actually found an extension on <a href="https://github.com/openstream/Magento5CentRounding" target="_blank">GitHub</a> for that, but it was not compatible with my Magento install. I am&nbsp;not sure if it is&nbsp;not compatible with Magento 1.9.2 or conflicting with&nbsp;any other extensions, it just didn't work.</p>
+<p>After digging into Magento core codes, I found that&nbsp;there is a simple workaround for this functionality, though we have to override Magento's&nbsp;core.<!--more--> Please be advised that&nbsp;this is not the best practice, it is just a simple workaround. If you want a better functionality and compatibility with&nbsp;future Magento updates, you'd better build a custom module / extension for that.</p>
+<p>Here's what I did&nbsp;as a workaround:</p>
+<ol>
+<li>Override Magento's core by copying<br />
+<code>app/code/core/Mage/Core/Model/store.php</code><br />
+to<br />
+<code><code>app/code/local/Mage/Core/Model/store.php</code></code>&nbsp;</li>
+<li>Edit the new copied file on the<br />
+<code><code>function&nbsp;roundPrice($price){}</code></code>&nbsp;</li>
+<li>Replace the line<br />
+<code>return round ($ price, 2);</code><br />
+with<br />
+<code><code>return round($price * 2, 1)/2;</code></code>&nbsp;</li>
+<li>Save</li>
+<li>Flush Magento Cache, and&nbsp;it's done!</li>
+</ol>
+<p>Let me know if it helps!</p>

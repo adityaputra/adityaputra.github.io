@@ -1,0 +1,61 @@
+---
+layout: post
+status: publish
+published: true
+title: Instalasi dan Konfigurasi Mailman dengan Postfix pada Ubuntu 12.04
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 583
+wordpress_url: http://adityaputra.com/?p=583
+date: '2016-02-18 07:15:04 +0800'
+date_gmt: '2016-02-18 00:15:04 +0800'
+categories:
+- Tutorial
+tags: []
+comments: []
+---
+<p><a href="https://www.gnu.org/software/mailman/" target="_blank">Mailman</a>, adalah suatu perangkat lunak bebas yang digunakan untuk manajemen <em>mailing list </em>dan <em>email newsletter</em>. Mailman menyediakan fitur manajemen melalui <em>web interface</em>, yang memudahkan adminsitrator dan pengguna untuk melakukan manajemen terhadap <em>subscription</em>-nya. Mailman merupakan salah satu perangkat lunak populer yang banyak digunakan oleh berbagai <em>mailing list</em> selama lebih dari sepuluh tahun.</p>
+<p>Kemarin, saya diminta salah seorang <em>client </em>untuk melakukan instalasi dan konfigurasi Mailman<!--more--> pada <a href="https://m.do.co/c/ab792337070f" target="_blank"><em>server </em>VPS Digitalocean</a> (link <em>referral</em>, <em>free credit</em> 10 USD untuk Anda). Server yang digunakan adalah Ubuntu Server 12.04 64 bit <em>fresh install</em>. Kalau Anda menggunakan server yang bukanlah <em>fresh install</em>, <em>do it at your own risk</em>, ya!</p>
+<p>Oya, semua perintah di bawah ini saya jalankan dengan menggunakan <em>user </em><code>root</code>.</p>
+<p>Pertama, pastikan <em>hostname </em>sudah diset pada <em>server </em>Anda:<br />
+<code>hostname<br />
+hostname -f</code></p>
+<p>Setelah <em>hostname </em>sudah dicek dan benar, lakukan <em>update </em>repositori dan <em>upgrade </em>seluruh sistem&nbsp;<em>server </em>Anda:<br />
+<code>apt-get update<br />
+apt-get-upgrade --show-upgraded</code></p>
+<p>Selanjutnya lakukan instalasi postfix yang digunakan untuk mengirimkan email langsung dari <em>server</em> Anda:<br />
+<code>apt-get install postfix</code><br />
+Saat melakukan instalasi postfix, pilihlah "Internet Site" sebagai "General type of mail configuration". Anda juga akan mengisikan <em>hostname </em>atau <em>domain name</em> pada saat instalasi (misal: <code>adityaputra.com</code>).</p>
+<p>Instalasi kedua yang perlu dilakukan adalah instalasi Mailman itu sendiri dengan mengeksekusi perintah berikut:<br />
+<code>apt-get install mailman</code><br />
+Hal yang perlu diperhatikan saat instalasi mailman, Anda akan memasukkan nama domain yang akan Anda gunakan. Biasanya, <em>mailing list </em>akan menggunakan subdomain dari domain utama, misal: <code>list.adityaputra.com</code>. Kecuali, kalau Anda ingin menggunakan domain induk untuk <em>mailing list</em>. ;)</p>
+<p>Selanjutnya, jangan lupa untuk mengarahkan DNS server untuk mengarahkan ke server Anda. Caranya, tambahkan A record pada <em>domain provider </em>Anda dengan IP <em>address</em> dari <em>server </em>Anda.</p>
+<p>Langkah terakhir adalah konfigurasi Mailman. Anda harus membuat minimal sebuah <em>base list </em>yang digunakan untuk informasi <em>general </em>seputar <em>mailing list</em>. Untuk membuatnya, eksekusi perintah berikut:<br />
+<code>newlist mailman</code><br />
+Perintah tersebut akan menghasilkan <em>output </em>semacam ini:<br />
+<code>## mailman mailing list<br />
+mailman:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman post mailman"<br />
+mailman-admin:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman admin mailman"<br />
+mailman-bounces:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman bounces mailman"<br />
+mailman-confirm:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman confirm mailman"<br />
+mailman-join:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman join mailman"<br />
+mailman-leave:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman leave mailman"<br />
+mailman-owner:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman owner mailman"<br />
+mailman-request:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman request mailman"<br />
+mailman-subscribe:&nbsp;&nbsp;&nbsp; "|/var/lib/mailman/mail/mailman subscribe mailman"<br />
+mailman-unsubscribe:&nbsp; "|/var/lib/mailman/mail/mailman unsubscribe mailman"</code><br />
+Selanjutnya, salin <em>output </em>dari perintah tersebut dan tambahkan ke dalam file <code>/etc/aliases</code> dengan perintah berikut:<br />
+<code>nano /etc/aliases</code>, lalu <em>paste</em> di baris terakhir.</p>
+<p>Terakhir, <em>start</em> Mailman dengan perintah:<br />
+<code>/etc/init.d/mailman start</code></p>
+<p>Anda seharusnya dapat melakukan login ke Mailman dengan mengunjungi <code>http://domainanda.com/cgi-bin/mailman/admin/mailman</code>, sesuaikan dengan nama domain yang Anda gunakan.</p>
+<p>Kalau Anda ingin membuat <em>list </em>baru, misal dengan nama 'diskusi', Anda dapat langsung mengeksekusi perintah<br />
+<code>newlist diskusi</code>, kemudian copy <em>output</em>-nya ke <code>/etc/aliases</code>, dan eksekusi perintah<br />
+<code>postalias /etc/aliases</code><br />
+Dari sini, Anda dapat mengunjungi halaman administrator <code>http://domainanda.com/cgi-bin/mailman/admin/diskusi</code>, dan <em>user </em>Anda dapat mendaftarkan diri pada halaman <code>http://example.com/cgi-bin/mailman/listinfo/diskusi</code>.</p>
+<p>Semoga mencerahkan! ;)</p>

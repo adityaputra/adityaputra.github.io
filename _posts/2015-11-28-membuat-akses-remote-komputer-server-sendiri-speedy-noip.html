@@ -1,0 +1,107 @@
+---
+layout: post
+status: publish
+published: true
+title: Membuat Komputer Server dengan Internet Speedy dan no-ip
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 451
+wordpress_url: http://adityaputra.com/?p=451
+date: '2015-11-28 11:08:23 +0800'
+date_gmt: '2015-11-28 04:08:23 +0800'
+categories:
+- Tutorial
+tags:
+- noip
+- remote
+- ddns
+- dynamic dns
+comments:
+- id: 543
+  author: Ijan
+  author_email: me@farizijan.com
+  author_url: http://www.farizijan.com
+  date: '2015-11-30 22:17:19 +0800'
+  date_gmt: '2015-11-30 15:17:19 +0800'
+  content: Terima kasih tutorialnya. sangat bermanfaat kakak.
+- id: 1018
+  author: Hayana
+  author_email: zahratulhayana@yahoo.co.id
+  author_url: ''
+  date: '2016-10-02 22:55:00 +0800'
+  date_gmt: '2016-10-02 15:55:00 +0800'
+  content: Permisi min,, saya juga pakai no-ip. Setelah setting di modem, dan juga
+    konfigurasi ddns client di web server.. Selanjutny apa yg harus saya lakukan,
+    serta cara mengecek sudah bisa apa belum ny
+- id: 1026
+  author: aditya
+  author_email: adityaf.putra@gmail.com
+  author_url: ''
+  date: '2016-10-14 15:33:50 +0800'
+  date_gmt: '2016-10-14 08:33:50 +0800'
+  content: "Halo,\r\nBisa langsung coba di ping domain no-ip nya mbak untuk mengetes
+    sukses / tidaknya."
+- id: 1031
+  author: indonesiapetrifiedwood
+  author_email: cv.karyabersama.info@gmail.com
+  author_url: ''
+  date: '2016-11-29 11:27:48 +0800'
+  date_gmt: '2016-11-29 04:27:48 +0800'
+  content: mksh gan
+- id: 1057
+  author: belajarmicrosoftword19
+  author_email: belajarmicrosoftword@gmail.com
+  author_url: ''
+  date: '2018-09-16 06:43:47 +0800'
+  date_gmt: '2018-09-15 23:43:47 +0800'
+  content: artikelnya sudah tiga tahun yang lalu.. dan saya baru kdnal no-ip.com.
+    numpang belajar ya Mas... semoga ilmunya jadi amal jariyah..
+- id: 1091
+  author: aditya
+  author_email: adityaf.putra@gmail.com
+  author_url: ''
+  date: '2019-07-15 09:34:05 +0800'
+  date_gmt: '2019-07-15 02:34:05 +0800'
+  content: Aamiin semoga bermanfaat mas
+---
+<p>Sebenarnya, semua komputer yang biasa kita gunakan sehari-hari dapat digunakan sebagai komputer server yang dapat dimanfaatkan untuk berbagai kebutuhan, misalnya server web, database, repositori file, akses remote, dan lainnya. <!--more-->Hanya saja, koneksi internet yang biasa digunakan di perumahan umumnya adalah dynamic IP address yang seringkali berganti IP publik setiap kali melakukan rekoneksi. Ini akan menjadi masalah ketika kita perlu mengarahkan nama domain tertentu ke IP komputer yang dituju. Atau sekalipun Anda tidak menggunakan nama domain, Anda akan kerepotan apabila IP komputer yang dituju seringkali berubah-ubah. Oya, tulisan kali ini 'gara-gara' Masbro <a href="http://twitter.com/fauzisusanto/" target="_blank">@FauziSusanto</a>.</p>
+<p>Layanan semacam noip.com memang sudah eksis cukup lama dalam menawarkan solusi dynamic DNS ini. Tapi tak ada salahnya untuk mengulas kembali, kan? ;-)</p>
+<p>Pada dasarnya, layanan dynamic DNS ini bekerja dengan urutan sebagai berikut:</p>
+<ol>
+<li>Domain dari dynamic DNS ke koneksi internet rumah / modem</li>
+<li>IP publik koneksi internet rumah / modem ke komputer tujuan (jaringan lokal)</li>
+</ol>
+<p>Untuk menggunakan layanan dynamic DNS dari no-ip ini, saya harap Anda sedikit banyak sudah memahami dasar-dasar jaringan komputer: DNS, IP publik / privat, IP statis / dinamis, dan dasar-dasar mengenai membangun dan konfigurasi komputer server. Pada tutorial ini, saya menggunakan perangkat-perangkat sebagai berikut:</p>
+<ul>
+<li>Komputer dengan OS Linux Mint (yang akan dijadikan sebagai server, komputer OSX maupun Windows juga dapat digunakan sebagai server)</li>
+<li>Modem jadul Speedy Sanex SA5100</li>
+</ul>
+<p>Seperti biasa, saya menggunakan komputer Linux sebagai server maupun client. No-ip juga&nbsp;mendukung sistem operasi OSX maupun Windows.</p>
+<p>Oya, untuk konfigurasi routing dari modem ke 'calon' komputer server, mungkin diperlukan tahapan berbeda sesuai dengan perangkat yang Anda gunakan. Tapi saya rasa hampir semua perangkat modem Speedy bisa digunakan, kok. Wong modem jadul saya aja bisa. :D</p>
+<p>Baiklah, berikut step-by-step konfigurasinya.</p>
+<ol>
+<li><strong>Register akun noip.com</strong></li>
+<li><strong>Add a host</strong>
+<p>[caption id="attachment_454" align="alignnone" width="1280"]<a href="http://adityaputra.com/wp-content/uploads/2015/11/Screenshot_2015-11-28_08-40-10.png"><img class="wp-image-454 size-full" src="http://adityaputra.com/wp-content/uploads/2015/11/Screenshot_2015-11-28_08-40-10.png" alt="Add a host" width="1280" height="800" /></a> Add a hostt[/caption]</p>
+<p>Nah, setelah akun noip.com aktif, Anda bis langsung menambahkan komputer rumah yang akan dijadikan sebagai komputer server. Masuk ke <em>section Hosts/Redirect</em>, lalu pilih opsi <em>Add host</em>. Isikan form yang tersedia sesuai kebutuhan. Default nya, minimal Anda hanya perlu memilih hostname untuk komputer server yang Anda inginkan. Isian IP address di form ini opsional untuk diganti, karena pada dasarnya nanti komputer Anda akan meng-<em>update </em>IP address ini sesuai dengan IP publik Anda secara otomatis. Nah, kalau sudah, langsung klik tombol <em>Add host</em>. Oya, kalau Anda ingin mengarahkan email ke server Anda, Anda juga perlu mengisikan <em>MX record</em>.</li>
+<li><strong>Install dan konfigurasi no-ip client</strong><br />
+Mudahnya, langsung ikuti petunjuk untuk masing-masing OS: <a href="http://www.noip.com/support/knowledgebase/installing-the-linux-dynamic-update-client/" target="_blank">Linux</a>, <a href="http://www.noip.com/support/knowledgebase/installing-the-dynamic-update-client-on-a-mac/" target="_blank">Mac</a>, dan <a href="http://www.noip.com/support/knowledgebase/installing-the-windows-4-x-dynamic-update-client-duc/" target="_blank">Windows</a>.</li>
+<li><strong>Konfigurasi IP statis</strong>
+<p>[caption id="attachment_459" align="aligncenter" width="1376"]<a href="http://adityaputra.com/wp-content/uploads/2015/11/1.png"><img class="size-full wp-image-459" src="http://adityaputra.com/wp-content/uploads/2015/11/1.png" alt="Konfigurasi IP statis pada modem Sanex SA5100" width="1376" height="776" /></a> Konfigurasi IP statis pada modem Sanex SA5100[/caption]</p>
+<p>Komputer yang akan dijadikan sebagai server perlu mendapatkan IP statis dari DHCP server agar tetap dapat mendapatkan IP yang sama&nbsp;setiap kali terhubung ke jaringan. Oleh karenanya,&nbsp;DHCP server harus dikonfigurasi untuk memberikan IP statis kepada komputer tersebut. Dalam&nbsp;contoh ini, DHCP server saya berada pada modem ADSL Speedy sehingga saya akan melakukan konfigurasi&nbsp;langsung ke modem.&nbsp;Pengaturan IP statis pada jaringan Anda mungkin berbeda&nbsp;bergantung pada&nbsp;letak konfigurasi DHCP server dan perangkat yang digunakan.<br />
+Pada umumnya, konfigurasi dilakukan dengan memilih MAC address dari komputer tujuan dan memasukkan IP address yang diinginkan. Btw, mohon maaf saya terpaksa menggunakan Windows karena web interface untuk konfigurasi modem hanya kompatibel dengan internet explorer. :|</li>
+<li><strong>Konfigurasi routing dari modem ke komputer server</strong>
+<p>[caption id="attachment_463" align="aligncenter" width="1376"]<a href="http://adityaputra.com/wp-content/uploads/2015/11/2.png"><img class="size-full wp-image-463" src="http://adityaputra.com/wp-content/uploads/2015/11/2.png" alt="Enable DMZ" width="1376" height="776" /></a> Enable DMZ[/caption]</p>
+<p>Tahapan ini&nbsp;harus dilakukan ketika&nbsp;komputer yang akan menjadi server tidak terhubung langsung ke internet dan mendapatkan IP publik.&nbsp;Oleh karenanya, kita perlu melakukan routing untuk mengarahkan semua&nbsp;<em>request</em>&nbsp;yang menuju<em>&nbsp;</em>ke IP publik Speedy kita untuk diarahkan langsung ke komputer server tujuan. Pada beberapa modem, termasuk modem yang saya gunakan,&nbsp;konfigurasi ini disebut sebagai DMZ atau&nbsp;<em>Demilitarized Zone</em>. Isikan IP address dari komputer tujuan sesuai dengan IP statis yang telah dipilih pada tahap sebelumnya.</li>
+<li><strong>Add services&nbsp;yang dibutuhkan</strong>
+<p>[caption id="attachment_465" align="aligncenter" width="1376"]<a href="http://adityaputra.com/wp-content/uploads/2015/11/4.png"><img class="size-full wp-image-465" src="http://adityaputra.com/wp-content/uploads/2015/11/4.png" alt="Add services" width="1376" height="776" /></a> Add services[/caption]</p>
+<p>Pada tahap ini, masukkan <em>services</em>&nbsp;yang akan diaktifkan. Sebisa mungkin, perhatikan celah keamanan yang mungkin terbuka. Jangan sampai terlalu banyak mengaktifkan layanan yang tidak diperlukan, yang pada akhirnya justru membahayakan keamanan komputer Anda. Layanan minimal untuk menjalankan server web&nbsp;biasanya hanya sebatas ICMP (ping), web server (port 80).</li>
+<li><strong>Tes ping dan semua layanan</strong>
+<p>[caption id="attachment_468" align="aligncenter" width="1280"]<a href="http://adityaputra.com/wp-content/uploads/2015/11/Screenshot_2015-11-28_11-04-58.png"><img class="size-full wp-image-468" src="http://adityaputra.com/wp-content/uploads/2015/11/Screenshot_2015-11-28_11-04-58.png" alt="Punya saya~~" width="1280" height="800" /></a> Punya saya~~[/caption]</p>
+<p>Terakhir, coba cek ping ke domain dan buka&nbsp;domain Anda melalui browser. Kalau Anda ingin melihat hasil tutorial ini, Anda bisa buka halaman <strong>[nama depan saya][dot]hopto[dot]org</strong> (semoga sedang online dan tolong jangan diusilin ya ehehehehe).&nbsp;Semoga berhasil<strong>!</strong></li>
+</ol>

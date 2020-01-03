@@ -1,0 +1,41 @@
+---
+layout: post
+status: publish
+published: true
+title: Sshuttle, Alternatif VPN untuk Menjaga Privasi di Linux / MacOS
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 395
+wordpress_url: http://adityaputra.com/?p=395
+date: '2015-08-20 07:24:11 +0800'
+date_gmt: '2015-08-20 00:24:11 +0800'
+categories:
+- Tutorial
+tags:
+- vpn
+- sshuttle
+- private wifi
+- ssh
+comments: []
+---
+<p style="text-align: justify;">Belakangan ini, saya tertarik untuk belajar lebih jauh mengenai pengamanan data pada komputer / gadget yang saya miliki. Setelah melakukan <a title="Membuat VPN Server Sendiri dengan OpenVPN Access Server" href="http://adityaputra.com/install-openvpn-access-server/" target="_blank">instalasi dan setup OpenVPN AS</a> dan berhasil menghubungkan komputer / tablet / smartphone saya ke VPN, saya mencoba alternatif lain untuk menjaga privasi lalu lintas data di komputer dengan menggunakan Sshuttle.<!--more--></p>
+<p style="text-align: justify;">OpenVPN AS memang lebih mudah untuk di-install dan dikonfigurasi daripada OpenVPN. Maklum, OpenVPN AS ini adalah aplikasi berbayar, hanya ia memberikan free license dengan batasan dua <em>concurrent connected clients</em>. Batasan inilah yang sehingga saya mencoba mencari alternatif lainnya. Sebenarnya, OpenVPN adalah aplikasi open source dan dapat digunakan bebas. Hanya saja, bagi saya, perlu usaha lebih untuk melakukan instalasi dan konfigurasinya. Karena server yang saya gunakan adalah server yang multifungsi, saya jadi belum berani mengambil resiko daripada saya mem-berantak-kan server saya.</p>
+<p style="text-align: justify;">Nah, untuk kali ini saya mencoba Sshuttle. Berbeda dengan OpenVPN, Sshuttle bukanlah sebuah VPN. Sshuttle hanya sebatas memanfaatkan koneksi SSH untuk membelokkan semua lalu lintas data melalui port SSH sehingga seluruh transmisi data dari komputer ter-enkripsi. Anda pun juga tidak akan mendapatkan IP dari Sshuttle seperti halnya jika Anda menggunakan VPN. Istilahnya, Sshuttle menggunakan <em>SSH tunnelling</em> untuk membelokkan <em>traffic</em> internet pada komputer Linux / MacOS Anda.</p>
+<p style="text-align: justify;"><a href="https://github.com/apenwarr/sshuttle" target="_blank">Sshuttle</a> sangat mudah untuk diinstall dan dikonfigurasi. Bahkan, Anda tidak perlu melakukan konfigurasi apapun pada komputer server. Selain itu, Anda juga tidak perlu membeli aplikasi ini karena aplikasi ini berlisensi GNU GPL V2.</p>
+<p style="text-align: justify;">Yang Anda butuhkan hanyalah komputer server dengan SSH server. Saya menggunakan droplet dari <a href="https://www.digitalocean.com/?refcode=ab792337070f" target="_blank">DigitalOcean</a> (referral, dengan tambahan credit gratis 10USD, 5USD/bulan) dan komputer klien dengan sistem operasi Linux / MacOS.</p>
+<p style="text-align: justify;">Selanjutnya, ikuti tahapan berikut:</p>
+<ol style="text-align: justify;">
+<li><tt>git clone git://github.com/apenwarr/sshuttle</tt> untuk meng-clone repositori Sshuttle</li>
+<li>jalankan dengan perintah <tt>./sshuttle --dns -vvr username@sshserver 0/0</tt></li>
+<li>DONE</li>
+</ol>
+<p style="text-align: justify;">Untuk membuktikan bahwa Anda telah terkoneksi ke internet secara private, lakukan pengecekan IP publik dari komputer klien. Salah satunya dengan melakukan <a href="https://www.google.com.sg/search?q=what+is+my+IP" target="_blank">pencarian Google dengan <em>query </em>"What is my IP"</a>. Voila! IP publik Anda berubah mengikuti IP publik dari komputer SSH server Anda!</p>
+<p style="text-align: justify;"><a href="http://adityaputra.com/wp-content/uploads/2015/08/Screenshot.png"><img class="aligncenter size-full wp-image-396" src="http://adityaputra.com/wp-content/uploads/2015/08/Screenshot.png" alt="Screenshot" width="1280" height="800" /></a></p>
+<p style="text-align: justify;">Anda juga dapat mengecek <em>traffic </em>komputer Anda setelah menggunakan Sshuttle. Kali ini saya menggunakan Nethogs pada Linux Mint. Anda dapat lihat dari gambar bahwa saya sedang melakukan streaming video dari Youtube tetapi Nethogs menunjukkan bahwa <em>traffic </em>Youtube melewati port SSH. 8-)</p>
+<p style="text-align: justify;">Anda tidak lagi perlu khawatir dengan para peretas yang akan berusaha mencuri data dari komputer Anda ketika terkoneksi pada wifi publik. ;)</p>
+<p style="text-align: justify;">sds</p>

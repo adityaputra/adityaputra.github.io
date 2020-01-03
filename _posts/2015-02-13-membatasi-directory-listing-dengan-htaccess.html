@@ -1,0 +1,28 @@
+---
+layout: post
+status: publish
+published: true
+title: Membatasi Directory Listing dengan .htaccess
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 165
+wordpress_url: http://adityaputra.com/?p=165
+date: '2015-02-13 10:38:56 +0800'
+date_gmt: '2015-02-13 03:38:56 +0800'
+categories:
+- Tutorial
+tags:
+- htaccess
+comments: []
+---
+<p style="text-align: justify;">Secara <em>default</em>, biasanya kita akan mampu mengakses direktori / folder pada suatu website dan melihat daftar <em>file</em> dan sub-direktori yang ada di dalamnya. Umumnya, ini terjadi karena tidak adanya halaman <code>index.html</code> ataupun <code>index.php</code> pada direktori tersebut. Nah, untuk mengatasinya, anda bisa saja menambahkan file <code>index.html</code> ataupun <code>index.php</code> di semua direktori, sampai ke direktori "paling dalam". Tapi sebenarnya ada cara lebih mudah dan efektif untuk mengatasinya. Caranya adalah dengan memanfaatkan <em>file </em><code>.htaccess</code>.</p>
+<p style="text-align: justify;">Nah, caranya adalah dengan menambahkan sebaris kode berikut pada <em>file</em> .htaccess Anda:<!--more--></p>
+<p style="text-align: justify;"><code>Options -Indexes</code></p>
+<p style="text-align: justify;">File <code>.htaccess</code> biasanya terletak di direktori <em>root</em> dari website Anda. Kalau di <em>shared hosting</em>, biasanya di dalam direktori <code>public_html</code>.</p>
+<p style="text-align: justify;">Untuk mengetesnya, coba akses salah satu direktori yang ada pada website Anda. Sebagai contoh, di website saya ini, ada salah satu direktori yang berisi data-data <em>development</em> aplikasi yang saya letakkan di direktori <code>dev</code>. Setelah saya proteksi dengan .htaccess, Anda akan menemukan halaman <a href="http://adityaputra.com/dev/" target="_blank">adityaputra.com/dev/</a> dengan pesan error 403 Forbidden.</p>
+<p style="text-align: justify;">Selamat mencoba. ;)</p>

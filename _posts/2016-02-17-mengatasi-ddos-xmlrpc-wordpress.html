@@ -1,0 +1,54 @@
+---
+layout: post
+status: publish
+published: true
+title: Mengatasi DDoS XMLRPC Exploit WorPress
+author:
+  display_name: aditya
+  login: aditya
+  email: adityaf.putra@gmail.com
+  url: ''
+author_login: aditya
+author_email: adityaf.putra@gmail.com
+wordpress_id: 579
+wordpress_url: http://adityaputra.com/?p=579
+date: '2016-02-17 17:44:02 +0800'
+date_gmt: '2016-02-17 10:44:02 +0800'
+categories:
+- Blog
+- Tutorial
+tags: []
+comments:
+- id: 986
+  author: "-name removed-"
+  author_email: se@karat.net
+  author_url: ''
+  date: '2016-05-12 21:43:39 +0800'
+  date_gmt: '2016-05-12 14:43:39 +0800'
+  content: menarik gan, ini membantu saya karena terjadi hal serupa di website saya.
+    terima kasih dan ditunggu artikel selanjutnya
+---
+<p>Jadi, hari ini website ini dan beberapa website lain yang berada di&nbsp;<em>server&nbsp;</em>ini mati ti ti ti selama beberapa saat karena DDoS yang dilakukan dari dua <em>IP address</em> berbeda. Dulu semasa kuliah, saya sempat mengira bahwa mana mungkin saya mengalaminya, apalagi saya juga bukan spesialis <em>server </em>dan jaringan.<!--more--></p>
+<p>Ceritanya begini. Siang tadi, ketika saya sedang bekerja dan akan mengakses <em>server </em>ini melalui SSH, saya mengalami <em>lag </em>yang luar biasa dan setelah saya cek, <em>resource </em>komputer <em>server </em>nyaris habis. CPU dan memori selalu 100 persen dan partisi <em>swap </em>pun nyaris penuh. Tidak berselang lama, saya menyadari bahwa ternyata <em>website</em> ini pun <em>down</em>.</p>
+<p>Untuk mencari tau masalah yang terjadi, saya melakukan <em>troubleshooting </em>sederhana dengan mengecek proses-proses apa yang menghabiskan <em>resource</em>, dan saya menemukan bahwa apache2 dan mysql lah yang menghabiskan <em>resource</em>. Saya terbiasa mengecek <em>system resources </em>dengan perintah <code>htop</code> yang bisa di-<em>install </em>di Linux dengan mudah. Kalau Anda tidak punya paket tersebut, cukup jalankan perintah <code>top</code> dan amati <em>sysem resources </em>yang mungkin menjadi masalah.</p>
+<p class="wp-image-581 size-full">Selanjutnya, saya coba mengecek <em>traffic </em>keluar dan masuk <em>server </em>dengan menggunakan program nethogs. Perintah detailnya adalah sebagai berikut:<br />
+<code>sudo nethogs eth0</code>, dimana <code>eth0</code> merupakan <em>network port</em> yang ingin dimonitor. Berikut hasilnya:</p>
+<p>[caption id="attachment_581" align="aligncenter" width="607"]<a href="http://adityaputra.com/wp-content/uploads/2016/02/Screenshot_2016-02-17_17-35-51.png"><img class="wp-image-581 size-full" src="http://adityaputra.com/wp-content/uploads/2016/02/Screenshot_2016-02-17_17-35-51.png" alt="DDoS Attack" width="607" height="350" /></a> DDoS Attack[/caption]</p>
+<p class="wp-image-580 size-full">Dari sini, saya coba <em>lookup </em>kedua IP<em> address</em> tersebut: 185.130.5.247 dan 185.130.5.209 melalui http://www.abuseipdb.com/. Hasilnya, ada ratusan komplain yang sudah dilakukan terhadap kedua IP <em>address</em> ini.</p>
+<p class="wp-image-580 size-full">Setelah jelas bahwa saya sedang diserang, selanjutnya saya coba mengatasinya dengan memberikan <em>firewall rules </em>untuk memblokir kedua IP address berikut dengan perintah ini:<br />
+<code>sudo iptables -A INPUT -s 185.130.5.209 -j DROP<br />
+sudo iptables -A INPUT -s 185.130.5.247 -j DROP</code><br />
+Kemudian saya aktifkan kembali apache2 yang tadinya saya <em>stop </em>untuk menghindari kehabisan <em>resource</em>. Hasilnya? Tidak berhasil. Ternyata serangan semacam ini tidak bisa diatasi dengan perintah iptables tersebut. Karena, serangan semacam ini memanfaatkan <em>pingback </em>pada file xmlrpc.php yang menjadi target serangan.</p>
+<p class="wp-image-580 size-full">Solusinya ternyata adalah dengan membatasi akses di level <em>routing</em>. Ini tentunya hanya penyedia layanan <em>hosting </em>/ VPS saja yang bisa melakukannya, jadi silakan hubungi <em>support team </em>dari <em>hosting </em><em>provider </em>Anda untuk solusi permanen.</p>
+<p class="wp-image-580 size-full">Sementara sambil menunggu respon dari <em>support team</em>, Anda dapat mencoba memblokir akses ke file xmrpc melalui <code>.htaccess</code>:<br />
+<code><Files "xmlrpc.php"><br />
+Order Allow,Deny<br />
+deny from all<br />
+</Files></code>, atau meng-install plugin untuk men-<em>disable </em>xmlrpc seperti plugin https://wordpress.org/plugins/disable-xml-rpc/, atau melalui konfigurasi apache2 untuk yang memiliki beberapa instalasi WordPress dalam satu server:<br />
+<code>sudo nano /etc/apache2/apache2.conf</code>, lalu tambahkan baris berikut:<br />
+<code><files xmlrpc.php><br />
+order allow,deny<br />
+deny from all<br />
+</files></code>, dan <em>restart </em>apache2 dengan perintah berikut:<br />
+<code>sudo service apache2 restart</code></p>
+<p class="wp-image-580 size-full">Oya, solusi tersebut hanya <em>temporary workaround</em>, mengingat dengan men-<em>disable </em>XMLRPC, beberapa fitur WordPress maupun plugin yang memanfaatkan XMLRPC tentunya tidak dapat bekerja. Fitur-fitur ini diantaranya adalah manajemen konten blog melalui aplikasi iOS / Android, dan fitur-fitur <em>remote </em>lainnya. Semoga membantu!</p>
