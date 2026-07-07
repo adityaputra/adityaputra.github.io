@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pahlawan Fokus — Pendamping Harian ADHD Anak 8 Tahun</title>
+  <meta name="description" content="Web app ringan untuk membantu anak laki-laki Indonesia usia 8 tahun dengan ADHD membangun rutinitas, fokus, emosi, gerak, dan tidur dengan pendampingan orang tua." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke konten</a>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Untuk anak 8 tahun + pendamping orang tua</p>
+      <h1>Pahlawan Fokus</h1>
+      <p class="subtitle">Misi kecil harian: rapi, fokus, bergerak, tenang, dan tidur tepat waktu.</p>
+    </div>
+    <button id="parentToggle" class="ghost-btn" aria-pressed="false">Mode Orang Tua</button>
+  </header>
+
+  <main id="main" class="layout">
+    <section class="hero-card" aria-labelledby="today-title">
+      <div class="hero-avatar" aria-hidden="true">🛡️</div>
+      <div class="hero-copy">
+        <h2 id="today-title">Halo, Pahlawan!</h2>
+        <p id="dailyMessage">Hari ini kita latihan jadi lebih kuat dengan langkah kecil. Tidak perlu sempurna.</p>
+        <div class="streak-bar" aria-label="Progress misi hari ini">
+          <span id="progressFill"></span>
+        </div>
+        <p class="tiny"><strong id="doneCount">0</strong>/<strong id="totalCount">0</strong> misi selesai hari ini</p>
+      </div>
+    </section>
+
+    <section class="panel focus-panel" aria-labelledby="focus-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Misi Fokus</p>
+          <h2 id="focus-title">Timer 10 menit</h2>
+        </div>
+        <span class="badge">Pendek & jelas</span>
+      </div>
+      <div class="timer" role="timer" aria-live="polite" id="timerDisplay">10:00</div>
+      <p class="helper">Pilih satu tugas kecil. Saat timer jalan, layar sengaja dibuat sederhana agar tidak jadi distraksi.</p>
+      <div class="task-row">
+        <input id="focusTask" maxlength="48" placeholder="Contoh: baca 2 halaman / bereskan LEGO" />
+      </div>
+      <div class="button-row">
+        <button id="startTimer" class="primary-btn">Mulai Fokus</button>
+        <button id="pauseTimer" class="secondary-btn">Jeda</button>
+        <button id="resetTimer" class="ghost-btn">Reset</button>
+      </div>
+      <div id="focusCoach" class="coach-box">Tips: mulai dari bagian yang paling mudah dulu.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="missions-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Misi Hari Ini</p>
+          <h2 id="missions-title">Checklist kecil</h2>
+        </div>
+        <button id="resetDay" class="ghost-btn small">Hari baru</button>
+      </div>
+      <div id="missionList" class="mission-list"></div>
+      <p class="helper">Hadiah terbaik: pujian cepat dan spesifik dari orang tua. Contoh: “Ayah lihat kamu mulai walau sulit.”</p>
+    </section>
+
+    <section class="panel" aria-labelledby="calm-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Saat Emosi Besar</p>
+          <h2 id="calm-title">Rem tenang 60 detik</h2>
+        </div>
+        <span class="badge">Tanpa hukuman</span>
+      </div>
+      <div class="calm-steps" id="calmSteps">
+        <button data-step="1" class="calm-step active">1. Tarik napas 🫁</button>
+        <button data-step="2" class="calm-step">2. Tekan kaki ke lantai 🦶</button>
+        <button data-step="3" class="calm-step">3. Sebutkan pilihan ✅</button>
+      </div>
+      <p id="calmText" class="coach-box">Tarik napas lewat hidung 4 hitungan. Buang pelan. Ulang 3 kali.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="move-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Gerak Dulu</p>
+          <h2 id="move-title">Break 2 menit</h2>
+        </div>
+        <button id="newMove" class="secondary-btn small">Acak</button>
+      </div>
+      <div id="moveCard" class="move-card">10 jumping jack + minum air</div>
+      <button id="doneMove" class="primary-btn full">Selesai Gerak</button>
+    </section>
+
+    <section class="panel parent-panel hidden" id="parentPanel" aria-labelledby="parent-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Catatan Orang Tua</p>
+          <h2 id="parent-title">Apa yang perlu dimasukkan dan dihindari</h2>
+        </div>
+        <span class="badge">Bukan diagnosis</span>
+      </div>
+      <div class="parent-grid">
+        <article>
+          <h3>Masukkan</h3>
+          <ul>
+            <li>Rutinitas visual pagi/sore/malam yang sangat singkat.</li>
+            <li>Reinforcement cepat: pujian spesifik, token sederhana, pilihan aktivitas.</li>
+            <li>Gerak fisik, tidur, dan transisi yang dibantu timer.</li>
+            <li>Kolaborasi: anak memilih misi, orang tua memandu.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Hindari</h3>
+          <ul>
+            <li>Leaderboard, kompetisi, streak yang membuat malu, atau ranking.</li>
+            <li>Hukuman digital, shame wording, dan target terlalu banyak.</li>
+            <li>Endless scrolling, loot box, iklan, notifikasi berlebihan.</li>
+            <li>Klaim “menyembuhkan ADHD”. Aplikasi hanya alat bantu rutinitas.</li>
+          </ul>
+        </article>
+      </div>
+      <label class="note-label" for="parentNote">Catatan hari ini</label>
+      <textarea id="parentNote" rows="5" placeholder="Contoh: lebih mudah fokus setelah sarapan; meltdown saat transisi mandi..."></textarea>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Pahlawan Fokus menyimpan data hanya di browser perangkat ini. Gunakan bersama arahan dokter/psikolog anak bila anak sudah terdiagnosis ADHD.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
