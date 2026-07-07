@@ -1,0 +1,9 @@
+{
+  "name": "Pahlawan Fokus",
+  "short_name": "Fokus",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#1467c9",
+  "lang": "id"
+}
